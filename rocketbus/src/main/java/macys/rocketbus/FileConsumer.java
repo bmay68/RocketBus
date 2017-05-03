@@ -1,6 +1,10 @@
 package macys.rocketbus;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Path;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -37,14 +41,48 @@ public class FileConsumer {
 		// Check to see if files are located in a directory for processing
 		File f = new File(fullPath);
 		if (f.exists()) {
+			// Check file to see if there is any data to read
+			if (f.length() < 1) { return; }
+			
+			// Read the file into memory for processing
+			String s = readFileToString(f);
+			if (s == null) { return; }
+			
 			// TODO parse records
 			
 			// TODO Place records onto ConcurrentLinkedQueue
-			
-			// TODO Need to add records onto linked queue not the object
 			_q.add(new Object());
 		} else {
 			_log.warn("File not found {}", fullPath);
+		}
+	}
+	
+	/**
+	 * Given a valid file attempt to read the contents into a string. Since we don't limit
+	 * the size in any shape or form this method may be dangerous for extremely large files.
+	 * @param f - an initialized and valid File object from which to read contents
+	 * @return String on success or null on error
+	 */
+	private String readFileToString(File f) {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(f);
+			byte[] data = new byte[(int) f.length()];
+			fis.read(data);
+			fis.close();
+			String str = new String(data, "UTF-8");
+			return str;
+		} catch (FileNotFoundException e) {
+			_log.warn(e.toString());
+			return null;
+		}
+		catch (UnsupportedEncodingException e) {
+			_log.error(e.toString());
+			return null;
+		}		
+		catch (IOException e) {
+			_log.error(e.toString());
+			return null;
 		}
 	}
 }
