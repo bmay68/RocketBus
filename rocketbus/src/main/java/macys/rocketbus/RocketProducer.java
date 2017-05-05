@@ -10,6 +10,7 @@ import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.MQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.client.producer.SendStatus;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 
@@ -53,6 +54,9 @@ public class RocketProducer {
 			// TODO Place message on queue
 			try {
 				SendResult rslt = _producer.send(msg);
+				if (!(rslt.getSendStatus() == SendStatus.SEND_OK)) {
+					_log.error("Could not send message to queue - {}", rslt.getSendStatus().toString());
+				}
 			} catch (MQClientException | RemotingException | MQBrokerException | InterruptedException e) {
 				_log.error("Failed to place message onto queue");
 				continue;
