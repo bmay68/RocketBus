@@ -48,10 +48,12 @@ public class FileConsumer {
 			String s = readFileToString(f);
 			if (s == null) { return; }
 			
-			// TODO parse records
-			
-			// TODO Place records onto ConcurrentLinkedQueue
-			_q.add(new Object());
+			// Parse records
+			String recs[] = s.split("\\r?\\n");
+			for (String r : recs) {
+				// Place records onto ConcurrentLinkedQueue
+				_q.add(r);
+			}
 		} else {
 			_log.warn("File not found {}", fullPath);
 		}

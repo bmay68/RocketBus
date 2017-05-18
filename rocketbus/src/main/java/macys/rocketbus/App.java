@@ -32,6 +32,9 @@ public class App
 	
 	private RocketProducer _rocketProducer = null;
 	
+	@SuppressWarnings("unused")
+	private RocketConsumer _rocketConsumer = null;
+	
 	private WatchService _watcher = null;
 
 	/**
@@ -40,6 +43,7 @@ public class App
 	 * @throws NullPointerException
 	 */
 	public App() throws NullPointerException, InvalidPathException, Exception {
+		_rocketConsumer = new RocketConsumer();
 		_fileConsumer = new FileConsumer(_q);
 		_rocketProducer = new RocketProducer(_q);
 		

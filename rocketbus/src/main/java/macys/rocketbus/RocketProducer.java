@@ -21,13 +21,13 @@ public class RocketProducer {
 	// TODO: Move this into properties file
 	private static final String _groupName = "MY_GROUP_NAME";
 	
-	private static final String _topic = "MY_TOPIC";
+	private static final String _topic = "SELF_TEST_TOPIC";
 	
 	private static final String _tag = "MY_TAG";
 	
 	private ConcurrentLinkedQueue<Object> _q;
 	
-	MQProducer _producer = null;
+	private MQProducer _producer = null;
 	
 	public RocketProducer(ConcurrentLinkedQueue<Object> q) throws Exception, NullPointerException {
 		_log.debug("RocketProducer");
@@ -42,14 +42,14 @@ public class RocketProducer {
 	public void Run() {
 		_log.debug("Run");
 		
-		Object o;
+		String o;
 		Message msg;
 		while(_q.size() > 0) {
-			o = _q.poll();
+			o = (String) _q.poll();
 			if (o == null) { continue; }			
 			
 			// Build message
-			msg = new Message(_topic, _tag, o.toString().getBytes());
+			msg = new Message(_topic, _tag, o.getBytes());
 			
 			// TODO Place message on queue
 			try {
@@ -59,6 +59,7 @@ public class RocketProducer {
 				}
 			} catch (MQClientException | RemotingException | MQBrokerException | InterruptedException e) {
 				_log.error("Failed to place message onto queue");
+				_log.error(e.toString());
 				continue;
 			}
 		}
