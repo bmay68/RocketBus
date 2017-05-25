@@ -28,15 +28,19 @@ public class App
 	// A shared sync'd buffer between consuming files and producing messages
 	private ConcurrentLinkedQueue<Object> _q = new ConcurrentLinkedQueue<Object>();
 	
+	// Provides reading files as they appear in the WatchPath directory
 	private FileConsumer _fileConsumer = null;
 	
+	// Provide a producer client
 	private RocketProducer _rocketProducer = null;
 	
+	// Provide a consumer client
 	@SuppressWarnings("unused")
 	private RocketConsumer _rocketConsumer = null;
 	
+	// Used to provide the events when changes are made in watch folder
 	private WatchService _watcher = null;
-
+	
 	/**
 	 * Initialize the application by creating core classes that handle units of work.
 	 * 
@@ -87,6 +91,10 @@ public class App
 		}
 	}
 	
+	/**
+	 * Main kick off point which run the file watcher, producer and consumer
+	 * @param args
+	 */
     public static void main( String[] args )
     {
     	try {

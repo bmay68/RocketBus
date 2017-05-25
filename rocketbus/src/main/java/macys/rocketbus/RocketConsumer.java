@@ -24,12 +24,15 @@ public class RocketConsumer {
 		
 	private static final String _tag = "MY_TAG";
 	
+	private static final String _nameServer = "192.168.177.129:9876";
+	
 	private MQConsumer _consumer;
 	
 	public RocketConsumer() throws Exception {
 		_log.debug("RocketConsumer()");
 		
 		_consumer = new DefaultMQPushConsumer(_groupName);
+		((DefaultMQPushConsumer) _consumer).setNamesrvAddr(_nameServer);
 		
 		try {
 			((DefaultMQPushConsumer)_consumer).subscribe(_topic, _tag);

@@ -25,6 +25,8 @@ public class RocketProducer {
 	
 	private static final String _tag = "MY_TAG";
 	
+	private static final String _nameServer = "192.168.177.129:9876";
+	
 	private ConcurrentLinkedQueue<Object> _q;
 	
 	private MQProducer _producer = null;
@@ -36,6 +38,7 @@ public class RocketProducer {
 		_q = q;
 		
 		_producer = new DefaultMQProducer(_groupName);
+		((DefaultMQProducer) _producer).setNamesrvAddr(_nameServer);
 		_producer.start();
 	}
 	
